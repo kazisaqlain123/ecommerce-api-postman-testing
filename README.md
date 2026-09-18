@@ -1,5 +1,7 @@
 # E-Commerce API Testing with Postman
 
+[![API Tests](https://github.com/kazisaqlain123/ecommerce-api-postman-testing/actions/workflows/api-tests.yml/badge.svg)](https://github.com/kazisaqlain123/ecommerce-api-postman-testing/actions/workflows/api-tests.yml)
+
 This project demonstrates basic API testing using Postman and Newman.
 
 ## API Used
