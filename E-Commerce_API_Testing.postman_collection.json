@@ -1,0 +1,214 @@
+{
+  "info": {
+    "_postman_id": "6ebe97d0-000b-432b-add9-2b3935d9ea5d",
+    "name": "E-Commerce API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58153822",
+    "_collection_link": "https://go.postman.co/collection/58153822-6ebe97d0-000b-432b-add9-2b3935d9ea5d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "All Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\n    pm.response.to.have.status(200);\n});\n\nconst response = pm.response.json();\n\npm.test(\"Products are present\", () => {\n    pm.expect(response.products).to.exist;\n});\n\npm.test(\"At least one product is present\", () => {\n    pm.expect(response.products.length).to.be.above(0);\n});\n\npm.test(\"Every product has required fields\", () => {\n    response.products.forEach(product => {\n        pm.expect(product.id).to.exist;\n        pm.expect(product.title).to.exist;\n        pm.expect(product.description).to.exist;\n    });\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/products",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Invalid Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);});\n\npm.test(\"Expected error message is present\", () => {\n    const response = pm.response.json();\n    pm.expect(response.message).to.include(\"not found\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/products/999",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products",
+            "999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", () => {\n    pm.response.to.have.status(201);\n});\nconst response = pm.response.json();\n\npm.test(\"Product ID is present\", () => {\n    pm.expect(response.id).to.exist;\n});\npm.test(\"Product data is correct\", () => {\n    pm.expect(response.title).to.eql(\"QA Test Product\");\n    pm.expect(response.price).to.eql(99);\n    pm.expect(response.description).to.eql(\n        \"Created using Postman API testing\"\n    );\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"QA Test Product\",\n  \"price\": 99,\n  \"description\": \"Created using Postman API testing\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://dummyjson.com/products/add",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\n    pm.response.to.have.status(200);\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product price is updated\", () => {\n    pm.expect(response.price).to.eql(149);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 149\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://dummyjson.com/products/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\n    pm.response.to.have.status(200);\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product is marked as deleted\", () => {\n    pm.expect(response.isDeleted).to.eql(true);\n});\n\npm.test(\"Correct product was deleted\", () => {\n    pm.expect(response.id).to.eql(1);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/products/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Product by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\n    pm.response.to.have.status(200);\n});\n\nconst response = pm.response.json();\n\npm.test(\"Correct product is returned\", () => {\n    pm.expect(response.id).to.eql(1);\n});\n\npm.test(\"Product has required fields\", () => {\n    pm.expect(response.title).to.exist;\n    pm.expect(response.price).to.exist;\n    pm.expect(response.description).to.exist;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://dummyjson.com/products/1",
+          "protocol": "https",
+          "host": [
+            "dummyjson",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
